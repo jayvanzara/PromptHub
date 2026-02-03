@@ -8,75 +8,26 @@ import Profile from "./Profile";
 
 const Dashboard = () => {
   const [theme, setTheme] = useState("dark");
-
-  const colors = {
-    dark: {
-      pageBg: "#181e2a",      // unified grey background
-      headerBorder: "#232a3d"
-    },
-    light: {
-      pageBg: "#ffffff",
-      headerBorder: "#e5e7eb"
-    }
-  };
+  const isDark = theme === "dark";
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        overflow: "hidden",
-        backgroundColor: colors[theme].pageBg
-      }}
-    >
+    <div className={`flex h-screen overflow-hidden ${isDark ? 'bg-[#181e2a]' : 'bg-white'}`}>
       <Sidebar theme={theme} />
 
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden"
-        }}
-      >
+      <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <div
-          style={{
-            height: "56px",
-            padding: "0 24px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            borderBottom: `1px solid ${colors[theme].headerBorder}`
-          }}
-        >
+        <div className={`h-14 px-6 flex items-center justify-end border-b shrink-0
+          ${isDark ? 'border-[#232a3d] bg-[#181e2a]' : 'border-gray-200 bg-white'}`}>
           <button
-            onClick={() =>
-              setTheme(prev => (prev === "dark" ? "light" : "dark"))
-            }
-            style={{
-              padding: "8px 14px",
-              borderRadius: "6px",
-              backgroundColor: "#6366f1",
-              color: "#ffffff",
-              border: "none",
-              fontWeight: 500,
-              cursor: "pointer"
-            }}
+            onClick={() => setTheme(prev => (prev === "dark" ? "light" : "dark"))}
+            className="px-3.5 py-2 rounded-md bg-[#6366f1] text-white border-none font-medium cursor-pointer hover:bg-indigo-600 transition-colors"
           >
-            {theme === "dark" ? "Light" : "Dark"}
+            {isDark ? "Light Mode" : "Dark Mode"}
           </button>
         </div>
 
-        {/* Main content */}
-        <div
-          style={{
-            flex: 1,
-            padding: "20px 24px",
-            overflowY: "auto",
-            backgroundColor: colors[theme].pageBg
-          }}
-        >
+        {/* Main Content */}
+        <div className={`flex-1 p-6 overflow-y-auto ${isDark ? 'bg-[#181e2a]' : 'bg-white'}`}>
           <Routes>
             <Route path="/" element={<DashboardHome theme={theme} />} />
             <Route path="/create" element={<CreatePrompt theme={theme} />} />

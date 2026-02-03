@@ -1,36 +1,7 @@
 import { useState } from "react";
 
 const CreatePrompt = ({ theme }) => {
-  const colors = {
-    dark: {
-      pageBg: "#181e2a",
-      cardBg: "#181e2a",
-      text: "#e5e7eb",
-      label: "#cbd5e1",
-      inputBg: "#1e293b",
-      border: "#334155",
-      buttonBg: "#6366f1",
-      buttonText: "#ffffff",
-      hoverBg: "#4f46e5",
-      shadow: "0 8px 30px rgba(0,0,0,0.35)"
-    },
-    light: {
-      pageBg: "#ffffff",
-      cardBg: "#ffffff",
-      text: "#111827",
-      label: "#4b5563",
-      inputBg: "#ffffff",
-      border: "#d1d5db",
-      buttonBg: "#6366f1",
-      buttonText: "#ffffff",
-      hoverBg: "#4f46e5",
-
-      // ✅ MATCHES PROMPT LIBRARY FLOATING FEEL
-      shadow: "0 10px 35px rgba(0,0,0,0.35)"
-    }
-  };
-
-  const current = theme === "light" ? colors.light : colors.dark;
+  const isDark = theme === "dark";
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
@@ -38,75 +9,39 @@ const CreatePrompt = ({ theme }) => {
   const [generatedPrompt, setGeneratedPrompt] = useState("");
 
   const handleGenerate = () => {
-    setGeneratedPrompt(
-      "This is a generated prompt based on your selected title, category, and tone."
-    );
+    setGeneratedPrompt("This is a generated prompt based on your selected title, category, and tone.");
   };
 
+  const inputClass = `w-full p-3 rounded-xl border outline-none text-sm
+    ${isDark ? 'bg-[#1e293b] border-[#334155] text-[#e5e7eb]' : 'bg-white border-gray-300 text-gray-900'}`;
+  
+  const labelClass = `block mb-2 font-medium ${isDark ? 'text-[#cbd5e1]' : 'text-gray-600'}`;
+
   return (
-    <div
-      style={{
-        backgroundColor: current.pageBg,
-        minHeight: "calc(100vh - 56px)",
-        padding: "24px",
-        boxSizing: "border-box",
-        display: "flex",
-        justifyContent: "flex-start"
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: current.cardBg,
-          borderRadius: "16px",
-          padding: "32px",
-          width: "100%",
-          maxWidth: "700px",
-          boxShadow: current.shadow,
-          display: "flex",
-          flexDirection: "column",
-          gap: "24px"
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "28px",
-            fontWeight: "700",
-            color: current.text
-          }}
-        >
+    <div className={`min-h-[calc(100vh-56px)] p-6 flex justify-start box-border ${isDark ? 'bg-[#181e2a]' : 'bg-white'}`}>
+      <div className={`w-full max-w-[700px] p-8 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.35)] flex flex-col gap-6
+        ${isDark ? 'bg-[#181e2a]' : 'bg-white'}`}>
+        
+        <h1 className={`text-[28px] font-bold m-0 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`}>
           Create New Prompt
         </h1>
 
-        <div style={styles.formGroup}>
-          <label style={{ ...styles.label, color: current.label }}>
-            Prompt Title
-          </label>
+        <div className="flex flex-col gap-2">
+          <label className={labelClass}>Prompt Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            style={{
-              ...styles.input,
-              backgroundColor: current.inputBg,
-              borderColor: current.border,
-              color: current.text
-            }}
+            className={inputClass}
           />
         </div>
 
-        <div style={styles.formGroup}>
-          <label style={{ ...styles.label, color: current.label }}>
-            Category
-          </label>
+        <div className="flex flex-col gap-2">
+          <label className={labelClass}>Category</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            style={{
-              ...styles.input,
-              backgroundColor: current.inputBg,
-              borderColor: current.border,
-              color: current.text
-            }}
+            className={inputClass}
           >
             <option value="">Select Category</option>
             <option value="Writing">Writing</option>
@@ -118,19 +53,12 @@ const CreatePrompt = ({ theme }) => {
           </select>
         </div>
 
-        <div style={styles.formGroup}>
-          <label style={{ ...styles.label, color: current.label }}>
-            Tone
-          </label>
+        <div className="flex flex-col gap-2">
+          <label className={labelClass}>Tone</label>
           <select
             value={tone}
             onChange={(e) => setTone(e.target.value)}
-            style={{
-              ...styles.input,
-              backgroundColor: current.inputBg,
-              borderColor: current.border,
-              color: current.text
-            }}
+            className={inputClass}
           >
             <option value="">Select Tone</option>
             <option value="Formal">Formal</option>
@@ -142,72 +70,22 @@ const CreatePrompt = ({ theme }) => {
         </div>
 
         <button
-          style={{
-            ...styles.button,
-            backgroundColor: current.buttonBg,
-            color: current.buttonText,
-            borderRadius: "12px",
-            fontWeight: "600"
-          }}
           onClick={handleGenerate}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.backgroundColor = current.hoverBg)
-          }
-          onMouseOut={(e) =>
-            (e.currentTarget.style.backgroundColor = current.buttonBg)
-          }
+          className="w-full py-3 rounded-xl bg-[#6366f1] text-white border-none font-semibold text-[15px] cursor-pointer hover:bg-indigo-600 transition-colors"
         >
           Generate Prompt
         </button>
 
-        <div style={styles.formGroup}>
-          <label style={{ ...styles.label, color: current.label }}>
-            Generated Prompt
-          </label>
-          <div
-            style={{
-              ...styles.generatedOutput,
-              backgroundColor: current.inputBg,
-              borderColor: current.border,
-              color: current.text,
-              borderRadius: "12px",
-              padding: "16px",
-              minHeight: "100px"
-            }}
-          >
+        <div className="flex flex-col gap-2">
+          <label className={labelClass}>Generated Prompt</label>
+          <div className={`p-4 rounded-xl border min-h-[100px] 
+            ${isDark ? 'bg-[#1e293b] border-[#334155] text-[#e5e7eb]' : 'bg-white border-gray-300 text-gray-900'}`}>
             {generatedPrompt || "Your generated prompt will appear here."}
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  formGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px"
-  },
-  label: {
-    fontWeight: "500"
-  },
-  input: {
-    padding: "12px",
-    borderRadius: "12px",
-    border: "1px solid",
-    outline: "none",
-    fontSize: "14px"
-  },
-  button: {
-    padding: "12px 16px",
-    border: "none",
-    cursor: "pointer",
-    fontSize: "15px"
-  },
-  generatedOutput: {
-    border: "1px solid"
-  }
 };
 
 export default CreatePrompt;

@@ -1,109 +1,57 @@
-import React from 'react';
-import { FaUserCog, FaUsers, FaClipboardList, FaSignOutAlt } from 'react-icons/fa';
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FaChartPie, FaUsers, FaLayerGroup, FaListAlt, FaClipboardList, FaSignOutAlt } from "react-icons/fa";
 
-const SidebarAdmin = ({ theme = 'dark', onLogout }) => {
-  const isDark = theme === 'dark';
-
-  const sidebarStyle = {
-    backgroundColor: isDark ? '#1f273d' : '#f5f7fa',
-    color: isDark ? '#e1e6f0' : '#2c3e50',
-    width: '250px',
-    height: '100vh',
-    padding: '2rem 1rem',
-    display: 'flex',
-    flexDirection: 'column',
-    boxShadow: isDark ? '2px 0 10px rgba(0,0,0,0.7)' : '2px 0 10px rgba(0,0,0,0.1)',
-    borderRadius: '0 12px 12px 0',
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  };
-
-  const logoStyle = {
-    fontSize: '1.8rem',
-    fontWeight: '700',
-    marginBottom: '2rem',
-    letterSpacing: '1.5px',
-    userSelect: 'none',
-  };
-
-  const navItemStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0.75rem 1rem',
-    marginBottom: '1rem',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontSize: '1.1rem',
-    transition: 'background-color 0.3s ease, color 0.3s ease',
-  };
-
-  const iconStyle = {
-    marginRight: '1rem',
-    fontSize: '1.4rem',
-  };
+const SidebarAdmin = ({ theme = "dark", onLogout }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isDark = theme === "dark";
 
   const navItems = [
-    { icon: <FaUsers />, label: 'Manage Users' },
-    { icon: <FaClipboardList />, label: 'Manage Prompts' },
-    { icon: <FaUserCog />, label: 'Admin Settings' },
+    { icon: <FaChartPie />, label: "Dashboard", path: "/admin/dashboard" },
+    { icon: <FaUsers />, label: "Users", path: "/admin/dashboard/users" },
+    { icon: <FaLayerGroup />, label: "Prompts", path: "/admin/dashboard/prompts" },
+    { icon: <FaListAlt />, label: "Categories", path: "/admin/dashboard/categories" },
+    { icon: <FaClipboardList />, label: "Logs", path: "/admin/dashboard/logs" },
   ];
 
   return (
-    <aside style={sidebarStyle} aria-label="Admin Sidebar Navigation">
-      <div style={logoStyle} aria-label="Admin Panel Logo">
-        Admin Panel
+    <div className={`w-[260px] h-screen flex flex-col border-r p-6 shrink-0 box-border
+      ${isDark ? 'bg-[#181e2a] text-[#e5e7eb] border-[#232a3d]' : 'bg-white text-gray-900 border-gray-200'}`}>
+      
+      <div className="mb-10">
+        <h2 className="text-2xl font-bold text-[#6366f1] m-0">Admin Panel</h2>
+        <p className="text-xs text-gray-400 mt-1">PromptHub Management</p>
       </div>
-      <nav style={{ flexGrow: 1 }}>
-        {navItems.map(({ icon, label }) => (
-          <div
-            key={label}
-            style={navItemStyle}
-            tabIndex={0}
-            role="button"
-            onClick={() => alert(`${label} clicked`)}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') alert(`${label} clicked`);
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = isDark ? '#2a3350' : '#e1e4ea';
-              e.currentTarget.style.color = isDark ? '#a0b4ff' : '#34495e';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = isDark ? '#e1e6f0' : '#2c3e50';
-            }}
-          >
-            <span style={iconStyle}>{icon}</span>
-            {label}
-          </div>
-        ))}
+
+      <nav className="flex flex-col gap-2 flex-1">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path || (item.path === "/admin/dashboard" && location.pathname === "/admin/dashboard/");
+          return (
+            <div
+              key={item.label}
+              onClick={() => navigate(item.path)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer text-[15px] font-medium transition-all duration-200
+                ${isActive 
+                  ? (isDark ? 'bg-[#1e293b] text-[#6366f1]' : 'bg-[#eef2ff] text-[#6366f1]') 
+                  : (isDark ? 'text-[#e5e7eb] hover:bg-[#1e293b]' : 'text-gray-900 hover:bg-gray-100')
+                }`}
+            >
+              <span className="text-lg">{item.icon}</span>
+              {item.label}
+            </div>
+          );
+        })}
       </nav>
+
       <button
         onClick={onLogout}
-        style={{
-          ...navItemStyle,
-          marginTop: 'auto',
-          backgroundColor: isDark ? '#3b4252' : '#dcdde1',
-          color: isDark ? '#ff6b6b' : '#c0392b',
-          border: 'none',
-          width: '100%',
-          fontWeight: '600',
-          userSelect: 'none',
-          transition: 'background-color 0.3s ease, color 0.3s ease',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = isDark ? '#ff6b6b' : '#e74c3c';
-          e.currentTarget.style.color = '#fff';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = isDark ? '#3b4252' : '#dcdde1';
-          e.currentTarget.style.color = isDark ? '#ff6b6b' : '#c0392b';
-        }}
-        aria-label="Logout button"
+        className="mt-auto flex items-center justify-center gap-2.5 p-3 rounded-lg bg-[#6366f1] text-white border-none font-semibold cursor-pointer text-sm shadow-[0_4px_12px_rgba(99,102,241,0.3)] hover:bg-indigo-600 transition-colors"
       >
-        <FaSignOutAlt style={{ marginRight: '0.5rem' }} />
+        <FaSignOutAlt />
         Logout
       </button>
-    </aside>
+    </div>
   );
 };
 

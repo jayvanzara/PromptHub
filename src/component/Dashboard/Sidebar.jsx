@@ -1,75 +1,58 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { FaHome, FaPen, FaBook, FaUser, FaSignOutAlt } from "react-icons/fa";
 
 const Sidebar = ({ theme }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isDark = theme === "dark";
 
-  const colors = {
-    dark: "#181e2a", // ✅ updated to PromptLibrary grey
-    light: "#ffffff"
-  };
-
-  const textColor = theme === "dark" ? "#e5e7eb" : "#111827";
+  const navItems = [
+    { to: "/dashboard", label: "Dashboard", icon: <FaHome /> },
+    { to: "/dashboard/create", label: "Create Prompt", icon: <FaPen /> },
+    { to: "/dashboard/library", label: "Prompt Library", icon: <FaBook /> },
+    { to: "/dashboard/profile", label: "Profile", icon: <FaUser /> }
+  ];
 
   return (
-    <div
-      style={{
-        width: "260px",
-        height: "100vh",
-        backgroundColor: colors[theme],
-        color: textColor,
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        borderRight: theme === "dark" ? "1px solid #232a3d" : "1px solid #e5e7eb"
-      }}
-    >
-      <div style={{ marginBottom: "32px" }}>
-        <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#6366f1" }}>
-          PromptHub
-        </h2>
-        <p style={{ fontSize: "12px", color: "#9ca3af" }}>
-          AI Prompt Generator
-        </p>
+    <div className={`w-[260px] h-screen flex flex-col border-r p-6 shrink-0 transition-colors duration-300
+      ${isDark ? 'bg-[#181e2a] text-[#e5e7eb] border-[#232a3d]' : 'bg-white text-gray-900 border-gray-200'}`}>
+      
+      {/* Brand */}
+      <div className="mb-10">
+        <h2 className="text-2xl font-bold text-[#6366f1] m-0">PromptHub</h2>
+        <p className="text-xs text-gray-400 mt-1">AI Prompt Generator</p>
       </div>
 
-      <nav style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-        {[
-          { to: "/dashboard", label: "Dashboard" },
-          { to: "/dashboard/create", label: "Create Prompt" },
-          { to: "/dashboard/library", label: "Prompt Library" },
-          { to: "/dashboard/profile", label: "Profile" }
-        ].map(link => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            style={{
-              textDecoration: "none",
-              color: textColor,
-              padding: "10px 12px",
-              borderRadius: "6px",
-              transition: "transform 0.15s ease"
-            }}
-            onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.02)")}
-            onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            {link.label}
-          </NavLink>
-        ))}
+      {/* Navigation */}
+      <nav className="flex flex-col gap-2 flex-1">
+        {navItems.map((item) => {
+          const isActive = item.to === "/dashboard" 
+            ? location.pathname === "/dashboard" || location.pathname === "/dashboard/"
+            : location.pathname.startsWith(item.to);
+
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg no-underline text-[15px] font-medium transition-all duration-200
+                ${isActive 
+                  ? (isDark ? 'bg-[#1e293b] text-[#6366f1]' : 'bg-[#eef2ff] text-[#6366f1]') 
+                  : (isDark ? 'text-[#e5e7eb] hover:bg-[#1e293b]' : 'text-gray-900 hover:bg-gray-100')
+                }`}
+            >
+              <span className="text-lg">{item.icon}</span>
+              {item.label}
+            </NavLink>
+          );
+        })}
       </nav>
 
+      {/* Logout */}
       <button
         onClick={() => navigate("/")}
-        style={{
-          marginTop: "auto",
-          padding: "10px",
-          borderRadius: "6px",
-          backgroundColor: "#6366f1",
-          color: "#fff",
-          border: "none",
-          cursor: "pointer",
-          fontWeight: "500"
-        }}
+        className="mt-auto flex items-center justify-center gap-2.5 p-3 rounded-lg bg-[#6366f1] text-white border-none font-semibold cursor-pointer text-sm shadow-[0_4px_12px_rgba(99,102,241,0.3)] hover:bg-indigo-600 transition-colors"
       >
+        <FaSignOutAlt />
         Logout
       </button>
     </div>

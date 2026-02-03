@@ -1,34 +1,5 @@
 const PromptLibrary = ({ theme }) => {
-  const colors = {
-    dark: {
-      pageBg: "#181e2a",
-      cardBg: "#181e2a",
-      text: "#e5e7eb",
-      subtext: "#a1a7bb",
-      divider: "#232a3d",
-      buttonBg: "#232a3d",
-      buttonText: "#6366f1",
-      buttonHover: "#2d3650",
-      shadow: "0 4px 24px 0 rgba(30,41,59,0.32)",
-      categoryBg: "#1e2535",
-      categoryTitle: "#a5b4fc"
-    },
-    light: {
-      pageBg: "#ffffff",
-      cardBg: "#ffffff",
-      text: "#111827",
-      subtext: "#64748b",
-      divider: "#e2e8f0",
-      buttonBg: "#eef2ff",
-      buttonText: "#6366f1",
-      buttonHover: "#e0e7ff",
-      shadow: "0 4px 24px 0 rgba(100,116,139,0.12)",
-      categoryBg: "#f1f5f9",
-      categoryTitle: "#6366f1"
-    }
-  };
-
-  const current = theme === "light" ? colors.light : colors.dark;
+  const isDark = theme === "dark";
 
   const promptCategories = [
     {
@@ -69,166 +40,46 @@ const PromptLibrary = ({ theme }) => {
   ];
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: current.pageBg,
-        color: current.text,
-        padding: 0,
-        margin: 0,
-        boxSizing: "border-box"
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 900,
-          margin: "0 0 0 0",
-          padding: "32px 16px 48px 16px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start"
-        }}
-      >
-        <div
-          style={{
-            width: "100%",
-            background: current.cardBg,
-            borderRadius: 22,
-            boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
-            padding: "36px 28px 32px 28px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "32px"
-          }}
-        >
-          {/* 🔽 FIXED HEADING */}
-          <h1
-            style={{
-              fontSize: 28,
-              fontWeight: 700,
-              margin: 0,
-              marginBottom: 8,
-              color: current.text,
-              letterSpacing: "-0.5px"
-            }}
-          >
+    <div className={`min-h-screen p-0 box-border ${isDark ? 'bg-[#181e2a] text-[#e5e7eb]' : 'bg-white text-gray-900'}`}>
+      <div className="max-w-[900px] m-0 px-4 pt-8 pb-12 flex flex-col items-start">
+        <div className={`w-full rounded-[22px] p-7 md:p-9 flex flex-col gap-8 shadow-[0_8px_32px_rgba(0,0,0,0.35)]
+          ${isDark ? 'bg-[#181e2a]' : 'bg-white'}`}>
+          
+          <h1 className={`text-[28px] font-bold tracking-tight m-0 mb-2 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`}>
             Prompt Library
           </h1>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "36px"
-            }}
-          >
+          <div className="flex flex-col gap-9">
             {promptCategories.map((cat, idx) => (
               <div key={cat.name}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: 12,
-                    gap: 10
-                  }}
-                >
-                  <div
-                    style={{
-                      height: 28,
-                      minWidth: 28,
-                      borderRadius: 14,
-                      background: current.categoryBg,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginRight: 8,
-                      fontWeight: 600,
-                      color: current.categoryTitle,
-                      fontSize: 16,
-                      letterSpacing: "0.5px"
-                    }}
-                  >
+                <div className="flex items-center mb-3 gap-2.5">
+                  <div className={`h-7 min-w-[28px] rounded-full flex items-center justify-center font-semibold text-base tracking-wide
+                    ${isDark ? 'bg-[#1e2535] text-[#a5b4fc]' : 'bg-slate-100 text-[#6366f1]'}`}>
                     {cat.name[0]}
                   </div>
-                  <span
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 20,
-                      color: current.categoryTitle,
-                      letterSpacing: "-0.5px"
-                    }}
-                  >
+                  <span className={`font-semibold text-xl tracking-tight ${isDark ? 'text-[#a5b4fc]' : 'text-[#6366f1]'}`}>
                     {cat.name}
                   </span>
                 </div>
 
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))",
-                    gap: "20px"
-                  }}
-                >
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-5">
                   {cat.prompts.map((prompt) => (
-                    <div
-                      key={prompt.id}
-                      style={{
-                        background: current.bg,
-                        borderRadius: 14,
-                        boxShadow: current.shadow,
-                        padding: "20px 18px 18px 18px",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 10,
-                        alignItems: "flex-start",
-                        transition: "box-shadow 0.18s",
-                        border: `1.5px solid ${current.divider}`
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          fontSize: 17,
-                          color: current.text,
-                          marginBottom: 2
-                        }}
-                      >
+                    <div key={prompt.id} className={`rounded-[14px] p-5 flex flex-col gap-2.5 items-start border transition-shadow duration-200
+                      ${isDark 
+                        ? 'bg-[#181e2a] border-[#232a3d] shadow-[0_4px_24px_0_rgba(30,41,59,0.32)]' 
+                        : 'bg-white border-slate-200 shadow-[0_4px_24px_0_rgba(100,116,139,0.12)]'
+                      }`}>
+                      <div className={`font-semibold text-[17px] m-0 mb-0.5 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`}>
                         {prompt.title}
                       </div>
-
-                      <div
-                        style={{
-                          fontSize: 15,
-                          color: current.subtext,
-                          marginBottom: 8,
-                          minHeight: 36
-                        }}
-                      >
+                      <div className={`text-[15px] mb-2 min-h-[36px] ${isDark ? 'text-[#a1a7bb]' : 'text-slate-500'}`}>
                         {prompt.description}
                       </div>
-
-                      <button
-                        style={{
-                          padding: "7px 18px",
-                          borderRadius: 8,
-                          border: "none",
-                          background: current.buttonBg,
-                          color: current.buttonText,
-                          fontWeight: 600,
-                          fontSize: 15,
-                          cursor: "pointer",
-                          transition: "background 0.18s, box-shadow 0.18s"
-                        }}
-                        onMouseOver={e => {
-                          e.currentTarget.style.background = current.buttonHover;
-                          e.currentTarget.style.boxShadow =
-                            "0 2px 8px 0 rgba(99,102,241,0.08)";
-                        }}
-                        onMouseOut={e => {
-                          e.currentTarget.style.background = current.buttonBg;
-                          e.currentTarget.style.boxShadow = "none";
-                        }}
-                      >
+                      <button className={`px-[18px] py-[7px] rounded-lg border-none font-semibold text-[15px] cursor-pointer transition-all duration-200
+                        ${isDark 
+                          ? 'bg-[#232a3d] text-[#6366f1] hover:bg-[#2d3650] hover:shadow-[0_2px_8px_0_rgba(99,102,241,0.08)]' 
+                          : 'bg-[#eef2ff] text-[#6366f1] hover:bg-[#e0e7ff]'
+                        }`}>
                         View Prompt
                       </button>
                     </div>
@@ -236,15 +87,7 @@ const PromptLibrary = ({ theme }) => {
                 </div>
 
                 {idx !== promptCategories.length - 1 && (
-                  <div
-                    style={{
-                      height: 1,
-                      background: current.divider,
-                      borderRadius: 1,
-                      margin: "28px 0 0 0",
-                      width: "100%"
-                    }}
-                  />
+                  <div className={`h-px w-full mt-7 rounded-full ${isDark ? 'bg-[#232a3d]' : 'bg-slate-200'}`} />
                 )}
               </div>
             ))}

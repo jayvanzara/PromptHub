@@ -1,18 +1,7 @@
 import React, { useState } from "react";
 
 const Profile = ({ theme }) => {
-  // EXACT same visual system as PromptLibrary
-  const pageBg = theme === "dark" ? "#181e2a" : "#ffffff";
-  const cardBg = theme === "dark" ? "#181e2a" : "#ffffff";
-  const text = theme === "dark" ? "#e5e7eb" : "#111827";
-  const muted = theme === "dark" ? "#9ca3af" : "#6b7280";
-  const border = theme === "dark" ? "#232a3d" : "#e5e7eb";
-
-  const cardShadow =
-    theme === "dark"
-      ? "0 8px 30px rgba(0,0,0,0.35)"
-      : "0 8px 32px rgba(0,0,0,0.35)"; // SAME AS PROMPT LIBRARY FLOAT
-
+  const isDark = theme === "dark";
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState({
     name: "Jay Vanzara",
@@ -26,118 +15,48 @@ const Profile = ({ theme }) => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: pageBg,
-        padding: "24px",
-        boxSizing: "border-box"
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "820px",
-          backgroundColor: cardBg,
-          borderRadius: "18px",
-          padding: "32px",
-          color: text,
-          boxShadow: cardShadow
-        }}
-      >
-        <h1 style={{ fontSize: "26px", fontWeight: 700, marginBottom: "24px" }}>
-          Profile
-        </h1>
+    <div className={`min-h-screen p-6 box-border ${isDark ? 'bg-[#181e2a]' : 'bg-white'}`}>
+      <div className={`max-w-[820px] rounded-[18px] p-8 shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+        ${isDark ? 'bg-[#181e2a] text-[#e5e7eb]' : 'bg-white text-gray-900'}`}>
+        
+        <h1 className="text-[26px] font-bold mb-6 m-0">Profile</h1>
 
-        {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <div
-            style={{
-              width: "72px",
-              height: "72px",
-              borderRadius: "50%",
-              background: "#6366f1",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "28px",
-              fontWeight: 700,
-              color: "#fff"
-            }}
-          >
+        <div className="flex items-center gap-5">
+          <div className="w-[72px] h-[72px] rounded-full bg-[#6366f1] flex items-center justify-center text-[28px] font-bold text-white">
             J
           </div>
-
           <div>
-            <div style={{ fontSize: "18px", fontWeight: 600 }}>
-              {user.name}
-            </div>
-            <div style={{ fontSize: "14px", color: muted }}>
-              @{user.username}
-            </div>
+            <div className="text-lg font-semibold">{user.name}</div>
+            <div className={`text-sm ${isDark ? 'text-[#9ca3af]' : 'text-gray-500'}`}>@{user.username}</div>
           </div>
         </div>
 
-        {/* Info */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "20px",
-            marginTop: "28px"
-          }}
-        >
+        <div className="grid grid-cols-2 gap-5 mt-7">
           {["name", "email", "phone"].map(field => (
             <div key={field}>
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: muted,
-                  marginBottom: "6px"
-                }}
-              >
-                {field === "name"
-                  ? "Full Name"
-                  : field === "email"
-                  ? "Email"
-                  : "Phone Number"}
+              <div className={`text-xs mb-1.5 ${isDark ? 'text-[#9ca3af]' : 'text-gray-500'}`}>
+                {field === "name" ? "Full Name" : field === "email" ? "Email" : "Phone Number"}
               </div>
-
               <input
                 value={user[field]}
                 disabled={!isEditing}
                 onChange={e => handleChange(field, e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "10px 12px",
-                  borderRadius: "8px",
-                  border: `1px solid ${border}`,
-                  backgroundColor: isEditing
-                    ? theme === "dark"
-                      ? "#1f2937"
-                      : "#ffffff"
-                    : "transparent",
-                  color: text,
-                  outline: "none"
-                }}
+                className={`w-full p-2.5 rounded-lg border outline-none
+                  ${isDark ? 'border-[#232a3d]' : 'border-gray-200'}
+                  ${isEditing 
+                    ? (isDark ? 'bg-[#1f2937] text-[#e5e7eb]' : 'bg-white text-gray-900') 
+                    : 'bg-transparent text-inherit'
+                  }`}
               />
             </div>
           ))}
         </div>
 
-        {/* Actions */}
-        <div style={{ display: "flex", gap: "12px", marginTop: "28px" }}>
+        <div className="flex gap-3 mt-7">
           {!isEditing ? (
             <button
               onClick={() => setIsEditing(true)}
-              style={{
-                padding: "10px 20px",
-                borderRadius: "8px",
-                background: "#6366f1",
-                color: "#fff",
-                border: "none",
-                fontWeight: 600,
-                cursor: "pointer"
-              }}
+              className="px-5 py-2.5 rounded-lg bg-[#6366f1] text-white font-semibold border-none cursor-pointer hover:bg-indigo-600 transition-colors"
             >
               Edit
             </button>
@@ -145,29 +64,14 @@ const Profile = ({ theme }) => {
             <>
               <button
                 onClick={() => setIsEditing(false)}
-                style={{
-                  padding: "10px 20px",
-                  borderRadius: "8px",
-                  background: "#6366f1",
-                  color: "#fff",
-                  border: "none",
-                  fontWeight: 600,
-                  cursor: "pointer"
-                }}
+                className="px-5 py-2.5 rounded-lg bg-[#6366f1] text-white font-semibold border-none cursor-pointer hover:bg-indigo-600 transition-colors"
               >
                 Save
               </button>
-
               <button
                 onClick={() => setIsEditing(false)}
-                style={{
-                  padding: "10px 20px",
-                  borderRadius: "8px",
-                  background: "transparent",
-                  border: `1px solid ${border}`,
-                  color: text,
-                  cursor: "pointer"
-                }}
+                className={`px-5 py-2.5 rounded-lg border bg-transparent cursor-pointer
+                  ${isDark ? 'border-[#232a3d] text-[#e5e7eb]' : 'border-gray-200 text-gray-900'}`}
               >
                 Cancel
               </button>
