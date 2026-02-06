@@ -1,3 +1,5 @@
+import React from "react";
+
 const PromptLibrary = ({ theme }) => {
   const isDark = theme === "dark";
 
@@ -29,70 +31,63 @@ const PromptLibrary = ({ theme }) => {
         { id: 7, title: "Study Guide Maker", description: "Summarize topics into simple study guides." },
         { id: 8, title: "Quiz Generator", description: "Create quizzes for self-assessment." }
       ]
-    },
-    {
-      name: "Blog",
-      prompts: [
-        { id: 9, title: "SEO Blog Ideas", description: "Get blog topic ideas with SEO in mind." },
-        { id: 10, title: "Headline Optimizer", description: "Improve your blog headlines for more clicks." }
-      ]
     }
   ];
 
   return (
-    <div className={`min-h-screen p-0 box-border ${isDark ? 'bg-[#181e2a] text-[#e5e7eb]' : 'bg-white text-gray-900'}`}>
-      <div className="max-w-[900px] m-0 px-4 pt-8 pb-12 flex flex-col items-start">
-        <div className={`w-full rounded-[22px] p-7 md:p-9 flex flex-col gap-8 shadow-[0_8px_32px_rgba(0,0,0,0.35)]
-          ${isDark ? 'bg-[#181e2a]' : 'bg-white'}`}>
-          
-          <h1 className={`text-[28px] font-bold tracking-tight m-0 mb-2 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`}>
-            Prompt Library
-          </h1>
+    // ✅ FIXED: Light mode is 'bg-transparent'
+    <div className={`w-full min-h-full p-8 ${isDark ? 'bg-[#181e2a]' : 'bg-transparent'}`}>
+      
+      <div className="mb-10">
+        <h1 className={`text-2xl font-bold m-0 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`}>
+          Prompt Library
+        </h1>
+        <p className={`mt-1 text-sm ${isDark ? 'text-[#9ca3af]' : 'text-gray-500'}`}>
+          Browse and reuse high-quality templates.
+        </p>
+      </div>
 
-          <div className="flex flex-col gap-9">
-            {promptCategories.map((cat, idx) => (
-              <div key={cat.name}>
-                <div className="flex items-center mb-3 gap-2.5">
-                  <div className={`h-7 min-w-[28px] rounded-full flex items-center justify-center font-semibold text-base tracking-wide
-                    ${isDark ? 'bg-[#1e2535] text-[#a5b4fc]' : 'bg-slate-100 text-[#6366f1]'}`}>
-                    {cat.name[0]}
+      <div className="flex flex-col gap-10">
+        {promptCategories.map((cat, idx) => (
+          <div key={cat.name}>
+            
+            <div className="flex items-center mb-5 gap-3">
+              <span className={`text-lg font-bold tracking-tight ${isDark ? 'text-[#6366f1]' : 'text-indigo-600'}`}>
+                {cat.name}
+              </span>
+              <div className={`h-px flex-1 ${isDark ? 'bg-[#374151]' : 'bg-gray-200'}`}></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {cat.prompts.map((prompt) => (
+                <div key={prompt.id} className={`rounded-xl p-7 border transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between
+                  ${isDark 
+                    ? 'bg-[#1e293b] border-[#374151] hover:border-[#6366f1]/50' 
+                    : 'bg-white border-gray-200 hover:border-indigo-300 shadow-sm'
+                  }`}>
+                  
+                  <div>
+                    <h3 className={`font-bold text-lg mb-3 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`}>
+                      {prompt.title}
+                    </h3>
+                    
+                    <p className={`text-[15px] mb-6 leading-relaxed ${isDark ? 'text-[#9ca3af]' : 'text-gray-600'}`}>
+                      {prompt.description}
+                    </p>
                   </div>
-                  <span className={`font-semibold text-xl tracking-tight ${isDark ? 'text-[#a5b4fc]' : 'text-[#6366f1]'}`}>
-                    {cat.name}
-                  </span>
+                  
+                  <button className={`w-full py-2.5 rounded-lg border font-medium text-sm cursor-pointer transition-colors
+                    ${isDark 
+                      ? 'border-[#374151] bg-transparent text-[#e5e7eb] hover:bg-[#374151]' 
+                      : 'border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    }`}>
+                    Use Template
+                  </button>
                 </div>
-
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-5">
-                  {cat.prompts.map((prompt) => (
-                    <div key={prompt.id} className={`rounded-[14px] p-5 flex flex-col gap-2.5 items-start border transition-shadow duration-200
-                      ${isDark 
-                        ? 'bg-[#181e2a] border-[#232a3d] shadow-[0_4px_24px_0_rgba(30,41,59,0.32)]' 
-                        : 'bg-white border-slate-200 shadow-[0_4px_24px_0_rgba(100,116,139,0.12)]'
-                      }`}>
-                      <div className={`font-semibold text-[17px] m-0 mb-0.5 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`}>
-                        {prompt.title}
-                      </div>
-                      <div className={`text-[15px] mb-2 min-h-[36px] ${isDark ? 'text-[#a1a7bb]' : 'text-slate-500'}`}>
-                        {prompt.description}
-                      </div>
-                      <button className={`px-[18px] py-[7px] rounded-lg border-none font-semibold text-[15px] cursor-pointer transition-all duration-200
-                        ${isDark 
-                          ? 'bg-[#232a3d] text-[#6366f1] hover:bg-[#2d3650] hover:shadow-[0_2px_8px_0_rgba(99,102,241,0.08)]' 
-                          : 'bg-[#eef2ff] text-[#6366f1] hover:bg-[#e0e7ff]'
-                        }`}>
-                        View Prompt
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                {idx !== promptCategories.length - 1 && (
-                  <div className={`h-px w-full mt-7 rounded-full ${isDark ? 'bg-[#232a3d]' : 'bg-slate-200'}`} />
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

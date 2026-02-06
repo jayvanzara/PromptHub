@@ -14,71 +14,77 @@ const Profile = ({ theme }) => {
     setUser({ ...user, [key]: value });
   };
 
+  const inputClass = `w-full p-3 rounded-lg border outline-none text-[15px] transition-all font-medium
+    ${isDark ? 'border-[#374151]' : 'border-gray-200'}
+    ${isEditing 
+      ? (isDark ? 'bg-[#1e293b] text-[#e5e7eb] focus:border-[#6366f1]' : 'bg-white text-gray-900 focus:border-indigo-500 shadow-sm') 
+      : `bg-transparent border-transparent px-0 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`
+    }`;
+
   return (
-    <div className={`min-h-screen p-6 box-border ${isDark ? 'bg-[#181e2a]' : 'bg-white'}`}>
-      <div className={`max-w-[820px] rounded-[18px] p-8 shadow-[0_8px_30px_rgba(0,0,0,0.35)]
-        ${isDark ? 'bg-[#181e2a] text-[#e5e7eb]' : 'bg-white text-gray-900'}`}>
-        
-        <h1 className="text-[26px] font-bold mb-6 m-0">Profile</h1>
-
-        <div className="flex items-center gap-5">
-          <div className="w-[72px] h-[72px] rounded-full bg-[#6366f1] flex items-center justify-center text-[28px] font-bold text-white">
-            J
-          </div>
-          <div>
-            <div className="text-lg font-semibold">{user.name}</div>
-            <div className={`text-sm ${isDark ? 'text-[#9ca3af]' : 'text-gray-500'}`}>@{user.username}</div>
-          </div>
+    <div className={`w-full min-h-full p-8 ${isDark ? 'bg-[#181e2a]' : 'bg-transparent'}`}>
+      
+      <div className="flex items-center gap-6 mb-10">
+        <div className="w-[80px] h-[80px] rounded-full bg-[#6366f1] flex items-center justify-center text-3xl font-bold text-white">
+          {user.name.charAt(0)}
         </div>
-
-        <div className="grid grid-cols-2 gap-5 mt-7">
-          {["name", "email", "phone"].map(field => (
-            <div key={field}>
-              <div className={`text-xs mb-1.5 ${isDark ? 'text-[#9ca3af]' : 'text-gray-500'}`}>
-                {field === "name" ? "Full Name" : field === "email" ? "Email" : "Phone Number"}
-              </div>
-              <input
-                value={user[field]}
-                disabled={!isEditing}
-                onChange={e => handleChange(field, e.target.value)}
-                className={`w-full p-2.5 rounded-lg border outline-none
-                  ${isDark ? 'border-[#232a3d]' : 'border-gray-200'}
-                  ${isEditing 
-                    ? (isDark ? 'bg-[#1f2937] text-[#e5e7eb]' : 'bg-white text-gray-900') 
-                    : 'bg-transparent text-inherit'
-                  }`}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex gap-3 mt-7">
-          {!isEditing ? (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="px-5 py-2.5 rounded-lg bg-[#6366f1] text-white font-semibold border-none cursor-pointer hover:bg-indigo-600 transition-colors"
-            >
-              Edit
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={() => setIsEditing(false)}
-                className="px-5 py-2.5 rounded-lg bg-[#6366f1] text-white font-semibold border-none cursor-pointer hover:bg-indigo-600 transition-colors"
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setIsEditing(false)}
-                className={`px-5 py-2.5 rounded-lg border bg-transparent cursor-pointer
-                  ${isDark ? 'border-[#232a3d] text-[#e5e7eb]' : 'border-gray-200 text-gray-900'}`}
-              >
-                Cancel
-              </button>
-            </>
-          )}
+        <div>
+          <h1 className={`text-2xl font-bold m-0 ${isDark ? 'text-[#e5e7eb]' : 'text-gray-900'}`}>
+            {user.name}
+          </h1>
+          <p className={`mt-1 text-sm ${isDark ? 'text-[#9ca3af]' : 'text-gray-500'}`}>
+            @{user.username} • Student Developer
+          </p>
         </div>
       </div>
+
+      <div className="max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        {["name", "email", "phone", "username"].map((field) => (
+          <div key={field}>
+            <label className={`block text-xs uppercase tracking-wider font-semibold mb-2 
+              ${isDark ? 'text-[#6366f1]' : 'text-indigo-600'}`}>
+              {field === "name" ? "Full Name" : field === "email" ? "Email Address" : field === "phone" ? "Phone Number" : "Username"}
+            </label>
+            <input
+              value={user[field]}
+              disabled={!isEditing}
+              onChange={e => handleChange(field, e.target.value)}
+              className={inputClass}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className={`flex gap-4 border-t pt-8 ${isDark ? 'border-[#374151]' : 'border-gray-200'}`}>
+        {!isEditing ? (
+          // ✅ FIXED: Removed shadow-lg. Flat button.
+          <button
+            onClick={() => setIsEditing(true)}
+            className="px-6 py-2.5 rounded-lg bg-[#6366f1] text-white font-semibold border-none cursor-pointer hover:bg-indigo-600 transition-colors"
+          >
+            Edit Profile
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={() => setIsEditing(false)}
+              className="px-6 py-2.5 rounded-lg bg-[#6366f1] text-white font-semibold border-none cursor-pointer hover:bg-indigo-600 transition-colors"
+            >
+              Save Changes
+            </button>
+            <button
+              onClick={() => setIsEditing(false)}
+              className={`px-6 py-2.5 rounded-lg border bg-transparent cursor-pointer font-medium transition-colors
+                ${isDark 
+                  ? 'border-[#374151] text-[#e5e7eb] hover:bg-[#374151]' 
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-200'}`}
+            >
+              Cancel
+            </button>
+          </>
+        )}
+      </div>
+
     </div>
   );
 };
