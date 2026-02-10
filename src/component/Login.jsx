@@ -90,11 +90,24 @@ const Login = () => {
           </span>
         </button>
 
-        {/* Admin Navigation Link */}
-        <div className="mt-6 text-center">
+        {/* Links Footer */}
+        <div className="mt-6 flex flex-col items-center gap-2">
+          
+          {/* Sign Up Link */}
+          <p className="text-sm text-gray-400">
+            Don't have an account?{" "}
+            <button 
+              onClick={() => navigate("/signup")}
+              className="text-indigo-400 font-semibold hover:underline"
+            >
+              Sign Up
+            </button>
+          </p>
+
+          {/* Admin Navigation Link */}
           <button 
             onClick={() => navigate("/admin/login")}
-            className="text-sm text-gray-400 hover:text-indigo-400 transition"
+            className="text-sm text-gray-500 hover:text-indigo-400 transition"
           >
             Go to Admin Login
           </button>

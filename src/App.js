@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
 import Login from "./component/Login";
+// ✅ FIXED PATH: Pointing to the Dashboard folder where you saved it
+import SignUp from "./component/Dashboard/SignUp"; 
 import Dashboard from "./component/Dashboard/dashboard";
 import AdminLogin from "./component/Admin/AdminLogin";
 import AdminDashboard from "./component/Admin/AdminDashboard";
@@ -16,6 +18,7 @@ function App() {
     <Routes>
       {/* User routes */}
       <Route path="/" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
       <Route path="/dashboard/*" element={<Dashboard />} />
 
       {/* Admin routes */}
