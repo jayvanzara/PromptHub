@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../services/api";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -14,18 +15,44 @@ const SignUp = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Registered:", formData);
-    // Add validation or API call here
-    navigate("/"); // Redirect to Login after sign up
+    
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        }), 
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigate("/"); 
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Failed to connect to backend:", error);
+      alert("Server error. Make sure your Python backend is running!");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <div className="w-full max-w-md p-10 rounded-xl shadow-xl bg-gray-800 text-white">
 
-        {/* Brand */}
         <div className="flex flex-col items-center mb-8">
           <div className="text-3xl font-semibold text-indigo-400">
             PromptHub
@@ -35,7 +62,6 @@ const SignUp = () => {
           </div>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 text-sm text-gray-300">
@@ -106,11 +132,11 @@ const SignUp = () => {
           </button>
         </form>
 
-        {/* Login Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-400">
             Already have an account?{" "}
             <button 
+              type="button"
               onClick={() => navigate("/")}
               className="text-indigo-400 font-semibold hover:underline"
             >

@@ -1,22 +1,43 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../services/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
-    navigate("/dashboard"); // Navigate to dashboard after login
+    
+    try {
+      const response = await fetch(`${BASE_URL}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("user_id", data.user_id);
+        localStorage.setItem("user_name", data.name);
+        navigate("/dashboard"); 
+      } else {
+        alert(data.error); 
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("Server error. Make sure your Python backend is running!");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <div className="w-full max-w-md p-10 rounded-xl shadow-xl bg-gray-800 text-white">
 
-        {/* Brand */}
         <div className="flex flex-col items-center mb-8">
           <div className="text-3xl font-semibold text-indigo-400">
             PromptHub
@@ -26,7 +47,6 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 text-sm text-gray-300">
@@ -65,35 +85,7 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Divider */}
-        <div className="flex items-center my-6">
-          <div className="flex-grow h-px bg-gray-600" />
-          <span className="px-3 text-sm text-gray-400">OR</span>
-          <div className="flex-grow h-px bg-gray-600" />
-        </div>
-
-        {/* Google Login */}
-        <button
-          className="w-full py-2 rounded-md border border-gray-600
-                     flex items-center justify-center gap-3
-                     bg-gray-900 hover:bg-gray-700 transition"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 48 48">
-            <path fill="#EA4335" d="M24 9.5c3.54 0 6.1 1.54 7.5 2.83l5.46-5.46C33.14 3.69 28.9 1.5 24 1.5 14.73 1.5 6.91 6.88 3.69 14.64l6.35 4.93C11.64 13.09 17.4 9.5 24 9.5z"/>
-            <path fill="#4285F4" d="M46.1 24.5c0-1.54-.14-3.02-.41-4.45H24v8.42h12.5c-.54 2.9-2.16 5.36-4.59 7.04l7.07 5.49C43.91 36.84 46.1 31.13 46.1 24.5z"/>
-            <path fill="#FBBC05" d="M10.04 28.57c-.5-1.49-.79-3.08-.79-4.72s.29-3.23.79-4.72l-6.35-4.93C2.05 17.02 1.5 20.45 1.5 24s.55 6.98 2.19 9.8l6.35-5.23z"/>
-            <path fill="#34A853" d="M24 46.5c6.48 0 11.92-2.14 15.89-5.82l-7.07-5.49c-1.96 1.32-4.47 2.1-8.82 2.1-6.6 0-12.36-3.59-15.96-8.78l-6.35 5.23C6.91 41.12 14.73 46.5 24 46.5z"/>
-          </svg>
-
-          <span className="text-white font-medium">
-            Continue with Google
-          </span>
-        </button>
-
-        {/* Links Footer */}
         <div className="mt-6 flex flex-col items-center gap-2">
-          
-          {/* Sign Up Link */}
           <p className="text-sm text-gray-400">
             Don't have an account?{" "}
             <button 
@@ -104,7 +96,6 @@ const Login = () => {
             </button>
           </p>
 
-          {/* Admin Navigation Link */}
           <button 
             onClick={() => navigate("/admin/login")}
             className="text-sm text-gray-500 hover:text-indigo-400 transition"

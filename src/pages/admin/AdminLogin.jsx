@@ -16,9 +16,14 @@ const AdminLogin = ({ theme = 'dark', onLogin }) => {
       setError('Please enter your email and password.');
       return;
     }
-    
-    onLogin && onLogin({ email });
-    navigate('/admin/dashboard');
+
+    if (email === "admin@prompthub.com" && password === "admin123") {
+        sessionStorage.setItem("isAdmin", "true");
+        onLogin && onLogin({ email });
+        navigate('/admin/dashboard');
+    } else {
+        setError('Invalid Admin Credentials');
+    }
   };
 
   return (
@@ -35,7 +40,7 @@ const AdminLogin = ({ theme = 'dark', onLogin }) => {
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-lg text-sm mb-6 text-center">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-sm mb-6 text-center">
             {error}
           </div>
         )}
@@ -50,7 +55,7 @@ const AdminLogin = ({ theme = 'dark', onLogin }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@prompthub.com"
-              className="w-full p-3 rounded-lg border border-[#374151] bg-[#374151] text-[#f9fafb] text-[15px] outline-none"
+              className="w-full p-3 rounded-lg border border-[#374151] bg-[#374151] text-[#f9fafb] text-[15px] outline-none focus:border-[#6366f1] transition-colors"
             />
           </div>
 
@@ -63,7 +68,7 @@ const AdminLogin = ({ theme = 'dark', onLogin }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full p-3 rounded-lg border border-[#374151] bg-[#374151] text-[#f9fafb] text-[15px] outline-none"
+              className="w-full p-3 rounded-lg border border-[#374151] bg-[#374151] text-[#f9fafb] text-[15px] outline-none focus:border-[#6366f1] transition-colors"
             />
           </div>
 
@@ -78,7 +83,7 @@ const AdminLogin = ({ theme = 'dark', onLogin }) => {
         <div className="mt-6 text-center">
           <span 
             onClick={() => navigate("/")}
-            className="text-[#9ca3af] text-sm cursor-pointer underline hover:text-[#f9fafb]"
+            className="text-[#9ca3af] text-sm cursor-pointer underline hover:text-[#f9fafb] transition-colors"
           >
             Return to User Login
           </span>

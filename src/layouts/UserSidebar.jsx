@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-// Make sure you have installed: npm install react-icons
 import { FaHome, FaPen, FaBook, FaUser, FaSignOutAlt } from "react-icons/fa";
 
 const Sidebar = ({ theme }) => {
@@ -10,26 +9,30 @@ const Sidebar = ({ theme }) => {
 
   const navItems = [
     { icon: <FaHome />, label: "Dashboard", path: "/dashboard" },
-    { icon: <FaPen />, label: "Create Prompt", path: "/dashboard/create" }, // Fixed: Changed to Pencil Icon
+    { icon: <FaPen />, label: "Create Prompt", path: "/dashboard/create-prompt" },
     { icon: <FaBook />, label: "Library", path: "/dashboard/library" },
     { icon: <FaUser />, label: "Profile", path: "/dashboard/profile" },
   ];
 
+  const handleLogout = () => {
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user_name");
+    sessionStorage.removeItem("dashboardVisited");
+    navigate("/");
+  };
+
   return (
-    <div className={`w-[260px] h-screen flex flex-col border-r p-6 shrink-0 box-border transition-colors duration-300
+    <div className={`w-[20%] min-w-[240px] max-w-[300px] h-screen flex flex-col border-r p-6 pt-4 shrink-0 box-border transition-all duration-300
       ${isDark ? 'bg-[#181e2a] text-[#e5e7eb] border-[#232a3d]' : 'bg-white text-gray-900 border-gray-200'}`}>
       
-      {/* Brand */}
-      <div className="mb-10">
-        <h2 className="text-2xl font-bold text-[#6366f1] m-0">PromptHub</h2>
+      <div className="mb-10 text-left">
+        <h2 className="text-3xl font-bold text-[#6366f1] m-0">PromptHub</h2>
         <p className="text-xs text-gray-400 mt-1">AI Prompt Manager</p>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex flex-col gap-2 flex-1">
+      <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
         {navItems.map((item) => {
-          // Check if active
-          const isActive = location.pathname === item.path || (item.path === "/dashboard" && location.pathname === "/dashboard/");
+          const isActive = location.pathname === item.path;
           
           return (
             <div
@@ -41,20 +44,19 @@ const Sidebar = ({ theme }) => {
                   : (isDark ? 'text-[#e5e7eb] hover:bg-[#1e293b]' : 'text-gray-900 hover:bg-gray-100')
                 }`}
             >
-              <span className="text-lg">{item.icon}</span>
-              {item.label}
+              <span className="text-lg shrink-0">{item.icon}</span>
+              <span className="truncate">{item.label}</span>
             </div>
           );
         })}
       </nav>
 
-      {/* Logout */}
       <button
-        onClick={() => navigate("/")}
-        className="mt-auto flex items-center justify-center gap-2.5 p-3 rounded-lg bg-[#6366f1] text-white border-none font-semibold cursor-pointer text-sm hover:bg-indigo-600 transition-colors"
+        onClick={handleLogout}
+        className="mt-auto flex items-center justify-center gap-2.5 p-3 rounded-lg bg-red-500 text-white border-none font-semibold cursor-pointer text-sm hover:bg-red-600 transition-colors shrink-0 active:scale-95"
       >
         <FaSignOutAlt />
-        Logout
+        <span>Logout</span>
       </button>
     </div>
   );

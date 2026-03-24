@@ -1,44 +1,63 @@
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react";
-import Login from "./component/Login";
-// ✅ FIXED PATH: Pointing to the Dashboard folder where you saved it
-import SignUp from "./component/Dashboard/SignUp"; 
-import Dashboard from "./component/Dashboard/dashboard";
-import AdminLogin from "./component/Admin/AdminLogin";
-import AdminDashboard from "./component/Admin/AdminDashboard";
+
+import Login from "./pages/auth/Login";
+import SignUp from "./pages/auth/SignUp";
+
+import Dashboard from "./layouts/Dashboard";
+import DashboardHome from "./pages/dashboard/DashboardHome";
+import CreatePrompt from "./pages/dashboard/CreatePrompt";
+import PromptLibrary from "./pages/dashboard/PromptLibrary";
+import Profile from "./pages/dashboard/Profile";
+
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
+import { ProtectedRoute, AdminProtectedRoute } from "./routes/ProtectedRoute";
 
 function App() {
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  const handleAdminLogout = () => {
-    setIsAdminAuthenticated(false);
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
   return (
     <Routes>
-      {/* User routes */}
       <Route path="/" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/dashboard/*" element={<Dashboard />} />
 
-      {/* Admin routes */}
-      <Route
-        path="/admin/login"
-        element={<AdminLogin onLogin={() => setIsAdminAuthenticated(true)} />}
-      />
-      <Route
-        path="/admin/dashboard/*"
-        element={
-          isAdminAuthenticated ? (
-            <AdminDashboard theme="dark" onLogout={handleAdminLogout} />
-          ) : (
-            <Navigate to="/admin/login" replace />
-          )
-        }
-      />
+      {/* Protected User Routes */}
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard theme={theme} toggleTheme={toggleTheme} />
+        </ProtectedRoute>
+      }>
+        <Route index element={<DashboardHome theme={theme} />} />
+        <Route path="create-prompt" element={<CreatePrompt theme={theme} />} />
+        <Route path="library" element={<PromptLibrary theme={theme} />} />
+        <Route path="profile" element={<Profile theme={theme} />} />
+      </Route>
 
-      {/* Optional: fallback 404 */}
-      <Route path="*" element={<h1>Page Not Found</h1>} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+
+      {/* Protected Admin Routes */}
+      <Route path="/admin/dashboard/*" element={
+        <AdminProtectedRoute>
+          <AdminDashboard theme={theme} toggleTheme={toggleTheme} />
+        </AdminProtectedRoute>
+      } />
+
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }
