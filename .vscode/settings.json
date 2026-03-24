@@ -1,3 +1,9 @@
 {
-    "python-envs.defaultEnvManager": "ms-python.python:system"
+    "python.defaultInterpreterPath": "backend/venv/bin/python",
+    "python.terminal.activateEnvInSelectedTerminal": true,
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/backend"
+    ],
+    "editor.formatOnSave": true,
+    "python.analysis.typeCheckingMode": "basic"
 }
